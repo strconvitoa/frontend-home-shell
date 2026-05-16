@@ -1,0 +1,10 @@
+export { default as About } from './About';
+export { default as Overview } from './Overview';
+export { default as Forgot } from './Forgot';
+export { default as Home } from './Home';
+export { default as New } from './New';
+export { default as Intake } from './Intake';
+export { default as Docs } from './Docs';
+export { default as Settings } from './Settings';
+export { default as IntakeForm } from './IntakeForm';
+export { default as Reset } from './Reset';
