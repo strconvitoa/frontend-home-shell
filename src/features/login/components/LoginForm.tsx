@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import logo from '../../../logo3.svg';
+import logo from '../../../logo_icon.png';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,9 +26,7 @@ export default function LoginForm() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <img src={logo} alt="Martian" className="h-10 w-auto opacity-90" />
           </div>
-          <h1 className="text-[11px] uppercase tracking-[0.4em] font-bold text-foreground">
-            Martian.Esq
-          </h1>
+
           <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground mt-2">
             Secure Portal / Auth Required
           </p>

@@ -1,4 +1,4 @@
-import logo from '../../../logo.svg';
+import logo from '../../../logo.png';
 export default function Promo() {
   return (
     <div className="flex flex-col items-start justify-start w-full h-full bg-white px-12 py-10">
@@ -10,7 +10,7 @@ export default function Promo() {
         <br />
         feel less{' '}
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-          Martian
+          martian
         </span>
         .
       </h2>
