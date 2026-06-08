@@ -1,4 +1,4 @@
-import logo from '../../../logo.svg';
+import logo from '../../../logo_icon.png';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,8 +25,8 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-8 h-20 flex justify-between items-center">
         {/* Brand/Logo */}
         <div className="flex items-center tracking-[0.25em] uppercase text-[11px] font-semibold text-foreground">
-          <img src={logo} alt="Martian" className="h-8 w-8 object-cover" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+          <img src={logo} alt="Martian" className="h-4 w-4 object-cover" />
+          <span className="pl-1 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
             Martian
           </span>
         </div>

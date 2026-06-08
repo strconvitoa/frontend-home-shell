@@ -45,11 +45,22 @@ export function Reset() {
           </div>
 
           <div className="mb-8">
+            <label className={labelStyle}>Verification Code</label>
+
+            <Input
+              type="text"
+              placeholder="verification code"
+              /* Use your theme's input/border variables and lower radius */
+              className="w-full bg-secondary/30 border border-border px-4 py-4 rounded-md outline-none focus:ring-1 focus:ring-ring transition-all placeholder:text-muted-foreground/50"
+            />
+          </div>
+
+          <div className="mb-8">
             <label className={labelStyle}>New Password</label>
 
             <Input
               type="password"
-              placeholder="password"
+              placeholder="new password"
               /* Use your theme's input/border variables and lower radius */
               className="w-full bg-secondary/30 border border-border px-4 py-4 rounded-md outline-none focus:ring-1 focus:ring-ring transition-all placeholder:text-muted-foreground/50"
             />
@@ -61,7 +72,7 @@ export function Reset() {
           </Button>
 
           <p className="mt-8 text-center text-[10px] text-muted-foreground tracking-wide">
-            If an account exists, you will receive a reset link shortly.
+            spread love ❤️ is the brooklyn way
           </p>
         </div>
       </div>
