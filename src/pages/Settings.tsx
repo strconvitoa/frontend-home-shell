@@ -5,7 +5,9 @@ import {
   X,
   Check,
   ArrowLeft,
+  Send,
   Languages,
+  UserPlus,
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Label } from '@/components/ui/label';
@@ -30,8 +32,94 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
+import { useState, useEffect } from 'react';
+export type Profile = {
+  email: string;
+  id: string;
+  name: string;
+  org_id: string;
+  phone: string;
+  role: 'admin' | 'member' | string;
+  status: 'active' | 'inactive' | string;
+};
 export default function Settings() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('member');
+  const [orgId, setOrgId] = useState('');
+  const [removeEmail, setRemoveEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [profile, setProfile] = useState<Profile>({
+    email: '',
+    id: '',
+    name: '',
+    org_id: '',
+    phone: '',
+    role: 'user',
+    status: 'active',
+  });
+  const [isRemoveOpen, setIsRemoveOpen] = useState(false);
+  useEffect(() => {
+    const localprofile = JSON.parse(localStorage.getItem('profile') || '');
+    setOrgId(localprofile.org_id);
+    setProfile(localprofile);
+  }, []);
+  const addUser = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('https://127.0.0.1:8443/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          role: role,
+          org_id: orgId,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.success == false) {
+        console.log(`${data.error}`);
+      }
+    } catch (err) {
+    } finally {
+      setLoading(false);
+      setIsOpen(false);
+    }
+  };
+  const removeUser = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('https://127.0.0.1:8443/users/remove', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: removeEmail,
+          role: profile.role,
+          org_id: profile.org_id,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.success == false) {
+        console.log(`${data.error}`);
+      }
+    } catch (err) {
+    } finally {
+      setLoading(false);
+      setIsRemoveOpen(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-background font-sans text-foreground p-8 max-w-7xl mx-auto">
       {/* Main Hero Section */}
@@ -44,14 +132,14 @@ export default function Settings() {
 
       {/* Action Buttons */}
       <div className="flex justify-center gap-4 mb-24">
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button
-              variant="ghost"
               className="text-[10px] uppercase tracking-widest gap-2 hover:text-destructive"
+              onClick={() => setIsOpen(true)}
             >
               Add User
-              <Plus size={14} strokeWidth={1.5} />
+              <UserPlus size={16} strokeWidth={0.5} />
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-4xl p-0 overflow-hidden border-none shadow-2xl bg-white">
@@ -89,8 +177,11 @@ export default function Settings() {
                   </Label>
                   <Input
                     id="name-1"
-                    defaultValue="John Doe"
+                    placeholder="John Doe"
                     className="border-t-0 border-x-0 border-b border-slate-200 rounded-none px-5 h-10 text-lg font-light focus-visible:ring-0"
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
                   />
 
                   {/* Email Field */}
@@ -99,23 +190,28 @@ export default function Settings() {
                   </Label>
                   <Input
                     id="email-1"
-                    defaultValue="john.doe@gmail.com"
+                    placeholder="john.doe@gmail.com"
                     className="border-t-0 border-x-0 border-b border-slate-200 rounded-none px-5 h-10 text-sm font-light focus-visible:ring-0"
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
                   />
 
                   {/* Role Select */}
                   <Label className="text-right pr-12 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-normal">
                     Account Role
                   </Label>
-                  <Select defaultValue="user">
+                  <Select
+                    defaultValue={role}
+                    onValueChange={(value) => setRole(value)}
+                  >
                     <SelectTrigger className="border-t-0 border-x-0 border-b border-slate-200 rounded-none px-5 h-10 text-[10px] uppercase tracking-widest focus:ring-0">
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="owner">Owner</SelectItem>
                         <SelectItem value="admin">Admin</SelectItem>
-                        <SelectItem value="user">User</SelectItem>
+                        <SelectItem value="member">Member</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -125,27 +221,23 @@ export default function Settings() {
 
             {/* 3. Footer with specific spacing */}
             <div className="flex items-center justify-end px-12 py-8 bg-slate-50/40 border-t border-slate-100 gap-6">
-              <Button>
+              <Button onClick={addUser}>
                 <Check size={16} strokeWidth={1.5} className="mr-2" />
-                Save
+                Add <Send size={12} className="rotate-[-15deg]" />
               </Button>
             </div>
           </DialogContent>
         </Dialog>
 
-        <Dialog>
+        <Dialog open={isRemoveOpen} onOpenChange={setIsRemoveOpen}>
           <DialogTrigger asChild>
-            <Button
-              variant="ghost"
-              className="text-[10px] uppercase tracking-widest gap-2 hover:text-destructive"
-            >
-              Delete User
-              <Trash2 size={14} strokeWidth={1.5} />
+            <Button className="text-[10px] uppercase tracking-widest gap-2 hover:text-destructive">
+              Remove User
+              <Trash2 size={16} strokeWidth={0.5} />
             </Button>
           </DialogTrigger>
 
           <DialogContent className="max-w-4xl p-0 overflow-hidden border-none shadow-2xl bg-white">
-            {/* 1. Balanced Header (Three-Column Flex) */}
             <div className="flex items-center px-8 py-4 border-b border-slate-100">
               <div className="flex-1">
                 <DialogClose asChild>
@@ -157,17 +249,14 @@ export default function Settings() {
                   </Button>
                 </DialogClose>
               </div>
-              {/* 3. Center Section (The Title) */}
-              {/* We add 'flex-1' and 'text-center' to ensure it sits in the middle of the modal */}
+
               <div className="flex-1 text-[10px] uppercase tracking-[0.4em] font-medium text-slate-400 text-center">
-                Delete User
+                Remove User
               </div>
 
-              {/* 4. Right Section (Occupies 1/3 of space to balance the left) */}
               <div className="flex-1" />
             </div>
 
-            {/* 2. Minimalist Form Body */}
             <div className="px-24 py-20">
               <form className="space-y-12">
                 <div className="grid grid-cols-[180px_1fr] items-center gap-y-10">
@@ -178,8 +267,9 @@ export default function Settings() {
                     <Input
                       id="username-1"
                       name="username"
-                      defaultValue="john.doe@gmail.com"
+                      placeholder="john.doe@gmail.com"
                       className="border-t-0 border-x-0 border-b border-slate-200 rounded-none px-2 h-10 text-lg font-light focus-visible:ring-0 focus-visible:border-destructive transition-colors"
+                      onChange={(e) => setRemoveEmail(e.target.value)}
                     />
                     <p className="text-[10px] text-destructive tracking-widest uppercase mt-2">
                       Warning: This action is permanent.
@@ -189,11 +279,10 @@ export default function Settings() {
               </form>
             </div>
 
-            {/* 3. Footer Actions (Justify End) */}
             <div className="flex items-center justify-end px-12 py-8 bg-slate-50/40 border-t border-slate-100 gap-8">
-              <Button type="submit">
+              <Button type="button" onClick={removeUser}>
                 <Check size={16} strokeWidth={1.5} className="mr-2" />
-                Accept
+                Remove
               </Button>
             </div>
           </DialogContent>

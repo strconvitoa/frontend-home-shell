@@ -16,7 +16,7 @@ export default function Intake() {
     <div className="min-h-screen bg-background font-sans text-foreground p-8 max-w-7xl mx-auto">
       {/* Main Hero Section */}
       <section className="text-center mb-16">
-        <h1 className="text-4xl font-light mb-2">Intake</h1>
+        <h1 className="text-4xl font-light mb-2">Leads</h1>
         <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
           counsel account activity / active portfolio
         </p>
@@ -39,7 +39,7 @@ export default function Intake() {
       <div className="grid grid-cols-3 gap-8 mb-32 border-b border-border pb-16">
         <div className="text-center">
           <span className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-4">
-            Active Intake
+            Active Leads
           </span>
           <span className="text-5xl font-light">12</span>
           <span className="block text-[8px] uppercase tracking-widest text-muted-foreground mt-4">
@@ -48,7 +48,7 @@ export default function Intake() {
         </div>
         <div className="text-center border-x border-border">
           <span className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-4">
-            Pending Intake
+            Pending Leads
           </span>
           <span className="text-5xl font-light">08</span>
           <span className="block text-[8px] uppercase tracking-widest text-muted-foreground mt-4">
@@ -70,7 +70,7 @@ export default function Intake() {
       <div className="mb-24">
         <div className="flex justify-between items-end mb-8">
           <h2 className="text-[10px] uppercase tracking-[0.2em] font-bold">
-            New Cases
+            New Leads
           </h2>
           <button className="text-[8px] uppercase tracking-widest text-muted-foreground hover:text-foreground">
             All Cases

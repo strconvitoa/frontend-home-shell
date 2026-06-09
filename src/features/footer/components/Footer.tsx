@@ -30,7 +30,7 @@ export default function Footer() {
           <span>
             © 2026{' '}
             {/* <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500"></span> */}
-            Martian.Esq
+            martian esq
           </span>
 
           <span>•</span>

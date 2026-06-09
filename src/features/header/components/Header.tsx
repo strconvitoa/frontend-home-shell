@@ -1,5 +1,5 @@
 import logo from '../../../logo_icon.png';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,14 +12,17 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const Header = () => {
-  // Navigation link styling logic to match the active state in screen.png
+  const navigate = useNavigate();
   const linkStyles = ({ isActive }: { isActive: boolean }) =>
     `transition-all duration-200 hover:text-foreground tracking-widest ${
       isActive
         ? 'text-foreground border-b border-foreground pb-1'
         : 'text-muted-foreground'
     }`;
-
+  const logout = () => {
+    localStorage.removeItem('profile');
+    navigate('/');
+  };
   return (
     <header className="w-full bg-background border-b border-transparent">
       <div className="max-w-7xl mx-auto px-8 h-20 flex justify-between items-center">
@@ -36,8 +39,11 @@ const Header = () => {
           {/* <NavLink to="/overview" className={linkStyles}>
             Overview
           </NavLink> */}
-          <NavLink to="/intake" className={linkStyles}>
-            Intake
+          <NavLink to="/overview" className={linkStyles}>
+            Overview
+          </NavLink>
+          <NavLink to="/leads" className={linkStyles}>
+            Leads
           </NavLink>
           {/* <NavLink to="/docs" className={linkStyles}>
             Documents
@@ -93,7 +99,9 @@ const Header = () => {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>Log out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={logout} className="cursor-pointer">
+                    Log out
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>

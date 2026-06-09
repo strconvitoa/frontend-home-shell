@@ -3,9 +3,50 @@ import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { ChevronLeft, Send, Lock, ChevronDown, Calendar } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export function New() {
   const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [businessName, setBusinessName] = useState('');
+  const [tradeName, setTradeName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const createAccount = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('https://127.0.0.1:8443/orgs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+          busname: businessName,
+          trade_name: tradeName,
+          phone: phone,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const resdata = await response.json();
+      if (resdata.success == false) {
+        console.log(`${resdata.error}`);
+      }
+      localStorage.setItem('profile', JSON.stringify(resdata.data));
+      navigate('/overview');
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Theme-consistent styles
   const labelStyle =
@@ -33,7 +74,7 @@ export function New() {
           <header className="mb-16 border-b border-border pb-8">
             <h1 className="text-3xl font-light mb-2">Account Registration</h1>
             <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-              Martian.Esq / Secure Onboarding
+              Martian esq / Secure Onboarding
             </p>
           </header>
 
@@ -48,6 +89,7 @@ export function New() {
                     type="text"
                     placeholder="first last"
                     className={inputStyle}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
                 <div>
@@ -56,6 +98,16 @@ export function New() {
                     type="email"
                     placeholder="name@firm.com"
                     className={inputStyle}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className={labelStyle}>Mobile number</label>
+                  <Input
+                    type="text"
+                    placeholder="786-777-1000"
+                    className={inputStyle}
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
                 <div>
@@ -64,6 +116,7 @@ export function New() {
                     type="password"
                     placeholder="••••••••"
                     className={inputStyle}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
@@ -81,6 +134,9 @@ export function New() {
                     type="text"
                     placeholder="ABC Coffee Roasters, LLC"
                     className={inputStyle}
+                    onChange={(e) => {
+                      setBusinessName(e.target.value);
+                    }}
                   />
                 </div>
                 <div>
@@ -89,6 +145,9 @@ export function New() {
                     type="text"
                     placeholder="ABC Coffee"
                     className={inputStyle}
+                    onChange={(e) => {
+                      setTradeName(e.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -97,8 +156,13 @@ export function New() {
 
           {/* Submit Button */}
           <div className="mt-20 pt-12 border-t border-border flex flex-col items-center">
-            <Button className="w-64 bg-primary text-primary-foreground py-4 text-[11px] uppercase tracking-[0.25em] font-medium hover:opacity-90 transition-opacity rounded-none">
-              Submit Registration
+            <Button
+              className="flex items-center gap-2 text-[10px] uppercase tracking-widest border border-border px-6 py-2 hover:bg-secondary transition-colors"
+              onClick={createAccount}
+              disabled={loading}
+            >
+              Create Account
+              <Send size={12} className="rotate-[-15deg]" />
             </Button>
             <p className="mt-6 text-[9px] uppercase tracking-widest text-muted-foreground">
               Subject to credential verification

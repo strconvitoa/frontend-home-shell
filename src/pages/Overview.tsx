@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 export default function Overview() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground p-8 max-w-7xl mx-auto">
@@ -11,15 +12,15 @@ export default function Overview() {
 
       {/* Action Buttons */}
       <div className="flex justify-center gap-4 mb-24">
-        <button className="bg-primary text-primary-foreground px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:opacity-90 transition-opacity">
-          New Intake
-        </button>
-        <button className="border border-border bg-background px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:bg-secondary transition-colors">
+        <Button className="bg-primary text-primary-foreground px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:opacity-90 transition-opacity">
+          New Leads
+        </Button>
+        <Button className="border border-border bg-background px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:bg-secondary transition-colors">
           Upload Doc
-        </button>
-        <button className="border border-border bg-background px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:bg-secondary transition-colors">
+        </Button>
+        <Button className="border border-border bg-background px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:bg-secondary transition-colors">
           Help
-        </button>
+        </Button>
       </div>
 
       {/* High-Level Stats */}
