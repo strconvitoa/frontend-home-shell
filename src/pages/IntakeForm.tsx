@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@/components/ui/button';
 import { ChevronLeft, Send, Lock, ChevronDown, Calendar } from 'lucide-react';
 import { Footer } from '@/features/footer';
 
@@ -20,17 +21,17 @@ const IntakePage = () => {
         </button>
 
         <div className="text-[10px] uppercase tracking-[0.3em] font-medium text-muted-foreground pl-12">
-          Intake Form
+          Form
         </div>
 
         <div className="flex items-center gap-6">
-          <button className="text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground">
+          {/* <button className="text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground">
             Save & Exit
-          </button>
-          <button className="flex items-center gap-2 text-[10px] uppercase tracking-widest border border-border px-6 py-2 hover:bg-secondary transition-colors">
+          </button> */}
+          <Button className="flex items-center gap-2 text-[10px] uppercase tracking-widest border border-border px-6 py-2 hover:bg-secondary transition-colors">
             Submit
             <Send size={12} className="rotate-[-15deg]" />
-          </button>
+          </Button>
         </div>
       </header>
 
@@ -133,9 +134,10 @@ const IntakePage = () => {
             <Lock size={12} />
             256-bit encryption active
           </div>
-          <button className="w-64 bg-primary text-primary-foreground py-4 text-[11px] uppercase tracking-[0.25em] font-medium hover:opacity-90 transition-opacity">
-            Send Intake
-          </button>
+          <Button className="flex items-center gap-2 text-[10px] uppercase tracking-widest border border-border px-6 py-2 hover:bg-secondary transition-colors">
+            Submit
+            <Send size={12} className="rotate-[-15deg]" />
+          </Button>
         </div>
       </main>
 

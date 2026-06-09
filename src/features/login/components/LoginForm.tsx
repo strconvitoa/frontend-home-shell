@@ -4,13 +4,50 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ShieldCheck } from 'lucide-react';
+import useProfileStore from '../../../stores/ProfileStore';
 
 export default function LoginForm() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const setProfile = useProfileStore((state) => state.setProfile);
 
-  const isActive = username.length > 0 && password.length > 0;
+  const submit = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('https://127.0.0.1:8443/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const resdata = await response.json();
+      if (resdata.success == false) {
+        console.log(`${resdata.error}`);
+        return;
+      }
+      localStorage.setItem('profile', JSON.stringify(resdata.data));
+      setProfile(resdata.data);
+      navigate('/overview');
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isActive = () => {
+    if (loading === true) return false;
+    if (email.length > 0 && password.length > 0) return true;
+    return false;
+  };
 
   // Consistency styles from global.css theme
   const labelStyle =
@@ -39,8 +76,8 @@ export default function LoginForm() {
             <Input
               type="text"
               placeholder="email address"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className={inputStyle}
             />
           </div>
@@ -60,23 +97,20 @@ export default function LoginForm() {
         {/* Action Button */}
         <Button
           disabled={!isActive}
-          className={`w-full py-6 text-[11px] uppercase tracking-[0.3em] font-semibold rounded-none transition-all duration-300 ${
-            isActive
-              ? 'bg-primary text-primary-foreground opacity-100 cursor-pointer'
-              : 'bg-muted text-muted-foreground opacity-50 cursor-not-allowed'
-          }`}
+          className={`w-full py-6 text-[11px] uppercase tracking-[0.3em] font-semibold rounded-none transition-all duration-300 bg-primary text-primary-foreground opacity-100 cursor-pointer`}
+          onClick={submit}
         >
-          Authenticate
+          Log in
         </Button>
 
         {/* Links & Recovery */}
         <div className="flex flex-col items-center mt-10 space-y-4">
-          <button
+          <Button
             onClick={() => navigate('/forgot')}
             className="text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
-            Forgot Credentials?
-          </button>
+            Forgot Password?
+          </Button>
 
           <div className="flex items-center gap-4 w-full py-4">
             <div className="flex-1 h-px bg-border" />
@@ -88,10 +122,9 @@ export default function LoginForm() {
 
           <Button
             onClick={() => navigate('/new')}
-            variant="outline"
             className="w-full rounded-none border-border text-[10px] uppercase tracking-widest hover:bg-secondary transition-colors cursor-pointer py-4"
           >
-            Request Registration
+            Create Account
           </Button>
         </div>
 

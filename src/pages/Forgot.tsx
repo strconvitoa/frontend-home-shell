@@ -3,9 +3,43 @@ import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
 
 export function Forgot() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
+  const submit = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        'https://127.0.0.1:8443/auth/reset-password',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+          }),
+        },
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const resdata = await response.json();
+      if (resdata.success == false) {
+        console.log(`${resdata.error}`);
+      }
+      navigate('/');
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Shared styles to match the Intake/Overview pages
   const labelStyle =
@@ -27,9 +61,8 @@ export function Forgot() {
             Back
           </Button>
 
-          {/* Brand Identity */}
           <h1 className="text-[11px] uppercase tracking-[0.25em] font-bold text-foreground mb-12">
-            Martian.Esq
+            Enter your email
           </h1>
 
           {/* Work Email Section */}
@@ -41,11 +74,18 @@ export function Forgot() {
               placeholder="work email"
               /* Use your theme's input/border variables and lower radius */
               className="w-full bg-secondary/30 border border-border px-4 py-4 rounded-md outline-none focus:ring-1 focus:ring-ring transition-all placeholder:text-muted-foreground/50"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
             />
           </div>
 
           {/* Submit Button - Styled like the 'Send Intake' button */}
-          <Button className="w-full bg-primary text-primary-foreground py-4 text-[11px] uppercase tracking-[0.25em] font-medium hover:opacity-90 transition-opacity rounded-none">
+          <Button
+            className="w-full bg-primary text-primary-foreground py-4 text-[11px] uppercase tracking-[0.25em] font-medium hover:opacity-90 transition-opacity rounded-none"
+            onClick={submit}
+            disabled={loading}
+          >
             Reset
           </Button>
 
