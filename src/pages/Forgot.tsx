@@ -41,7 +41,6 @@ export function Forgot() {
     }
   };
 
-  // Shared styles to match the Intake/Overview pages
   const labelStyle =
     'block text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3';
 
@@ -51,7 +50,6 @@ export function Forgot() {
       <div className="flex-1 flex justify-center px-4 py-20">
         {/* Form Container */}
         <div className="w-full max-w-sm">
-          {/* Back Button - Styled like the Intake Page */}
           <Button
             variant="outline"
             onClick={() => navigate('/')}

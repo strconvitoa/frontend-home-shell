@@ -1,5 +1,15 @@
 import { Button } from '@/components/ui/button';
+import { BadgePlus, Upload, BadgeQuestionMark } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
 export default function Overview() {
+  const [activeCases, setActiveCases] = useState(0);
+  const [pendingDocs, setPendingDocs] = useState(0);
+  const [meetings, setMeetings] = useState(0);
+  const [cases, setCases] = useState([]);
+  const [insight, setInsight] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
+
   return (
     <div className="min-h-screen bg-background font-sans text-foreground p-8 max-w-7xl mx-auto">
       {/* Main Hero Section */}
@@ -12,14 +22,26 @@ export default function Overview() {
 
       {/* Action Buttons */}
       <div className="flex justify-center gap-4 mb-24">
-        <Button className="bg-primary text-primary-foreground px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:opacity-90 transition-opacity">
+        <Button
+          className="bg-primary text-primary-foreground px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:opacity-90 transition-opacity"
+          disabled
+        >
           New Leads
+          <BadgePlus size={16} strokeWidth={0.5} />
         </Button>
-        <Button className="border border-border bg-background px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:bg-secondary transition-colors">
+        <Button
+          className="border border-border bg-background px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:bg-secondary transition-colors"
+          disabled
+        >
           Upload Doc
+          <Upload size={16} strokeWidth={0.5} />
         </Button>
-        <Button className="border border-border bg-background px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:bg-secondary transition-colors">
+        <Button
+          className="border border-border bg-background px-8 py-3 text-[10px] uppercase tracking-widest font-medium hover:bg-secondary transition-colors"
+          disabled
+        >
           Help
+          <BadgeQuestionMark size={16} strokeWidth={0.5} />
         </Button>
       </div>
 
@@ -29,25 +51,25 @@ export default function Overview() {
           <span className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-4">
             Active Cases
           </span>
-          <span className="text-5xl font-light">12</span>
+          <span className="text-5xl font-light">{activeCases}</span>
           <span className="block text-[8px] uppercase tracking-widest text-muted-foreground mt-4">
-            +2 This Month
+            +0 This Month
           </span>
         </div>
         <div className="text-center border-x border-border">
           <span className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-4">
             Pending Docs
           </span>
-          <span className="text-5xl font-light">08</span>
+          <span className="text-5xl font-light">{pendingDocs}</span>
           <span className="block text-[8px] uppercase tracking-widest text-muted-foreground mt-4">
-            3 Requiring Attention
+            0 Requiring Attention
           </span>
         </div>
         <div className="text-center">
           <span className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-4">
             Meetings
           </span>
-          <span className="text-5xl font-light">04</span>
+          <span className="text-5xl font-light">{meetings}</span>
           <span className="block text-[8px] uppercase tracking-widest text-muted-foreground mt-4">
             Next: Today 2pm
           </span>
@@ -66,29 +88,7 @@ export default function Overview() {
         </div>
 
         <div className="space-y-12">
-          {[
-            {
-              title: 'Harrison vs. Sterling Corp',
-              ref: 'LJ-2024-0082',
-              type: 'Real Estate',
-              status: 'In Review',
-              date: 'Oct 24',
-            },
-            {
-              title: 'Estate of Lillian Thorne',
-              ref: 'LJ-2024-0015',
-              type: 'Probate',
-              status: 'Awaiting Sig',
-              date: 'Oct 22',
-            },
-            {
-              title: 'Miller Family Trust',
-              ref: 'LJ-2024-0102',
-              type: 'Family Law',
-              status: 'In Review',
-              date: 'Oct 18',
-            },
-          ].map((item, i) => (
+          {cases.map((item, i) => (
             <div
               key={i}
               className="flex justify-between items-center group cursor-pointer"
@@ -116,27 +116,19 @@ export default function Overview() {
             Upcoming
           </h2>
           <div className="space-y-10">
-            <div>
-              <span className="block text-[8px] uppercase tracking-widest text-muted-foreground mb-2">
-                Today 2:00 PM • Zoom
-              </span>
-              <h4 className="text-sm font-medium">Pre-trial Review</h4>
-              <p className="text-[10px] text-muted-foreground">
-                atty. sarah jenkins
-              </p>
-            </div>
-            <div>
-              <span className="block text-[8px] uppercase tracking-widest text-muted-foreground mb-2">
-                Tomorrow 10:30 AM • In-Person
-              </span>
-              <h4 className="text-sm font-medium">Initial Consultation</h4>
-              <p className="text-[10px] text-muted-foreground">
-                atty. marcus vance
-              </p>
-            </div>
-            <button className="text-[9px] uppercase tracking-widest font-bold border-b border-foreground mt-4 pb-1">
-              Schedule New
-            </button>
+            {upcoming.map(() => {
+              return (
+                <div>
+                  <span className="block text-[8px] uppercase tracking-widest text-muted-foreground mb-2">
+                    Today 2:00 PM • Zoom
+                  </span>
+                  <h4 className="text-sm font-medium">Pre-trial Review</h4>
+                  <p className="text-[10px] text-muted-foreground">
+                    atty. sarah jenkins
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -145,19 +137,19 @@ export default function Overview() {
             Insights
           </h2>
           <div className="space-y-10">
-            <div>
-              <h4 className="text-sm font-medium mb-2">Housing Law Update</h4>
-              <p className="text-[11px] leading-relaxed text-muted-foreground">
-                New regulations affecting zoning disclosures for 2024 have been
-                published.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-sm font-medium mb-2">System Status</h4>
-              <p className="text-[11px] leading-relaxed text-muted-foreground">
-                Encrypted cloud nodes have been successfully synchronized.
-              </p>
-            </div>
+            {insight.map(() => {
+              return (
+                <div>
+                  <h4 className="text-sm font-medium mb-2">
+                    Housing Law Update
+                  </h4>
+                  <p className="text-[11px] leading-relaxed text-muted-foreground">
+                    New regulations affecting zoning disclosures for 2024 have
+                    been published.
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
