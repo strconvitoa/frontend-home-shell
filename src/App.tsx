@@ -5,11 +5,12 @@ import {
   Home,
   New,
   Overview,
-  Intake,
+  Leads,
   IntakeForm,
   Docs,
   Settings,
   Reset,
+  Admin,
 } from './pages';
 import ProtectedRoute from './pages/ProtectedRoute';
 import { MainLayout } from './layouts';
@@ -28,8 +29,9 @@ export function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayout />}>
           <Route path="/overview" element={<Overview />} />
-          <Route path="/leads" element={<Intake />} />
+          <Route path="/leads" element={<Leads />} />
           <Route path="/docs" element={<Docs />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
       </Route>
