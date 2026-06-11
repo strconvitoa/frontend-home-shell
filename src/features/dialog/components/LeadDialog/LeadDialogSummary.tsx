@@ -3,7 +3,7 @@ import { BrushCleaning, Check, Languages } from 'lucide-react';
 import { Button, Input, Label } from '@/components';
 import { Separator } from '@/components';
 import { Progress } from '@/components/ui/progress';
-import type { Lead } from '..';
+import type { Lead } from '../..';
 type LeadSummaryProps = {
   lead: Lead;
 };
@@ -13,7 +13,7 @@ export default function LeadDialogSummary({ lead }: LeadSummaryProps) {
     issue,
     area,
     status,
-    date,
+    created,
     urgency,
     quality,
     conflict,

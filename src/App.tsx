@@ -6,7 +6,7 @@ import {
   New,
   Overview,
   Leads,
-  IntakeForm,
+  LeadForm,
   Docs,
   Settings,
   Reset,
@@ -25,7 +25,7 @@ export function App() {
       <Route path="/forgot" element={<Forgot />} />
       <Route path="/about" element={<About />} />
       <Route path="/reset" element={<Reset />} />
-      <Route path="/thank-you" element={<IntakeForm />} />
+      <Route path="/thank-you" element={<LeadForm />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayout />}>
           <Route path="/overview" element={<Overview />} />

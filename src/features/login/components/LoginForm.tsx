@@ -3,7 +3,7 @@ import logo from '../../../logo_icon.png';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Rocket } from 'lucide-react';
 import useProfileStore from '../../../stores/ProfileStore';
 
 export default function LoginForm() {
@@ -97,10 +97,17 @@ export default function LoginForm() {
         {/* Action Button */}
         <Button
           disabled={!isActive}
-          className={`w-full py-6 text-[11px] uppercase tracking-[0.3em] font-semibold rounded-none transition-all duration-300 bg-primary text-primary-foreground opacity-100 cursor-pointer`}
+          className="w-full py-6 text-[11px] uppercase tracking-[0.3em] font-semibold rounded-none transition-all duration-300 bg-primary text-primary-foreground opacity-100 cursor-pointer flex items-center justify-center gap-2"
           onClick={submit}
         >
-          Log in
+          <span>Log in</span>
+          {loading ? (
+            <Rocket
+              size={16}
+              strokeWidth={0.5}
+              className="animate-[bounce_2s_infinite] ease-in-out"
+            />
+          ) : null}
         </Button>
 
         {/* Links & Recovery */}

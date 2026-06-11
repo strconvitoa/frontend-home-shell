@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, Send, Lock, ChevronDown, Calendar } from 'lucide-react';
 import { Footer } from '@/features/footer';
 
-const IntakePage = () => {
+const LeadForm = () => {
   const labelStyle =
     'block text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-2';
   const inputStyle =
@@ -147,4 +147,4 @@ const IntakePage = () => {
   );
 };
 
-export default IntakePage;
+export default LeadForm;

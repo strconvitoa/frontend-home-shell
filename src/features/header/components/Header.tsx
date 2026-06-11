@@ -87,7 +87,7 @@ const Header = () => {
                     onClick={() => {
                       navigate('/admin');
                     }}
-                    className="cursor-pointer"
+                    className={`cursor-pointer ${profile.role === 'admin' ? '' : 'hidden'}`}
                   >
                     Admin <ShieldUser size={16} strokeWidth={0.5} />
                   </DropdownMenuItem>

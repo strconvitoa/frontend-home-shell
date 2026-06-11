@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import LeadDialogSummary from './LeadDialogSummary';
 import LeadDialogTrigger from './LeadDialogTrigger';
-import type { Lead } from '../';
+import type { Lead } from '../..';
 type LeadDialogProp = {
   lead: Lead;
 };
