@@ -10,7 +10,7 @@ import {
   GitMergeConflict,
   BrickWallShield,
 } from 'lucide-react';
-import type { Lead } from '../';
+import type { Lead } from '../..';
 type LeadDialogTriggerProps = {
   lead: Lead;
 };
@@ -20,7 +20,7 @@ const LeadDialogTrigger = ({ lead, ...props }: LeadDialogTriggerProps) => {
     issue,
     area,
     status,
-    date,
+    created,
     urgency,
     quality,
     conflict,
@@ -85,7 +85,7 @@ const LeadDialogTrigger = ({ lead, ...props }: LeadDialogTriggerProps) => {
       <div className="flex gap-16 text-[9px] uppercase tracking-[0.15em] text-muted-foreground">
         <span className="w-24">{area}</span>
         <span className="w-24">{status}</span>
-        <span className="w-12 text-right">{date}</span>
+        <span className="w-24 text-right">{created}</span>
       </div>
     </div>
   );
