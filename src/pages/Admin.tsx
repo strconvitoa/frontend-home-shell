@@ -114,7 +114,7 @@ export default function Admin() {
   const removeUser = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://127.0.0.1:8443/users/remove', {
+      const response = await fetch('https://127.0.0.1:8443/users', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

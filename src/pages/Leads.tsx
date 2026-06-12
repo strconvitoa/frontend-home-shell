@@ -7,9 +7,9 @@ import { type Lead } from '@/features/dialog/types/Lead';
 
 export default function Leads() {
   const storeProfile = useProfileStore((state) => state.profile);
-  const [lead, setLeads] = useState<[Lead]>([{ id: '' }]);
-  const [pendingLead, setPendingLeads] = useState<[Lead]>([{ id: '' }]);
-  const [discardedleads, setDiscardedleads] = useState<[Lead]>([{ id: '' }]);
+  const [lead, setLeads] = useState<[Lead]>([{}]);
+  const [pendingLead, setPendingLeads] = useState<[Lead]>([{}]);
+  const [discardedleads, setDiscardedleads] = useState<[Lead]>([{}]);
   const [active, setActive] = useState(0);
   const [pending, setPending] = useState(0);
   const [neu, setNeu] = useState(0);
@@ -23,39 +23,38 @@ export default function Leads() {
     setProfile(storeProfile);
   }, [profile]);
   useEffect(() => {
-    const featchLeads = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(
-          `https://127.0.0.1:8443/leads?org_id=${profile.org_id}`,
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const resdata = await response.json();
-        if (resdata.success == false) {
-          console.log(`${resdata.error}`);
-          return;
-        }
-        setLeads(resdata.data.leads);
-        setPendingLeads(resdata.data.pending);
-        setDiscardedleads(resdata.data.discarded_leads);
-        setActive(resdata.data.leads.length);
-        setPending(resdata.data.pending.length);
-        setNeu(numOfLeadsThisWeek(resdata.data.pending));
-        if (resdata.data.pending.length != 0) {
-          const ord = orderLeads(resdata.data.pending);
-          const first = ord[0];
-          setLatest(first?.created || '');
-        }
-      } catch (err) {
-      } finally {
-        setLoading(false);
-      }
-    };
     if (Object.keys(profile).length !== 0) featchLeads();
   }, [profile]);
-
+  const featchLeads = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://127.0.0.1:8443/leads?org_id=${profile.org_id}`,
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const resdata = await response.json();
+      if (resdata.success == false) {
+        console.log(`${resdata.error}`);
+        return;
+      }
+      setLeads(resdata.data.leads);
+      setPendingLeads(resdata.data.pending);
+      setDiscardedleads(resdata.data.discarded_leads);
+      setActive(resdata.data.leads.length);
+      setPending(resdata.data.pending.length);
+      setNeu(numOfLeadsThisWeek(resdata.data.pending));
+      if (resdata.data.pending.length != 0) {
+        const ord = orderLeads(resdata.data.pending);
+        const first = ord[0];
+        setLatest(first?.created || '');
+      }
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
+  };
   const numOfLeadsThisWeek = (leads: Lead[]) => {
     const now = new Date();
     const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -80,6 +79,60 @@ export default function Leads() {
     });
     return leads;
   };
+
+  const discard = async (leadID: string) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`https://127.0.0.1:8443/leads/${leadID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: 'discard',
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const resdata = await response.json();
+      if (resdata.success == false) {
+        console.log(`${resdata.error}`);
+        return;
+      }
+      await featchLeads();
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
+  };
+  const accept = async (leadID: string) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`https://127.0.0.1:8443/leads/${leadID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: 'accept',
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const resdata = await response.json();
+      if (resdata.success == false) {
+        console.log(`${resdata.error}`);
+        return;
+      }
+      await featchLeads();
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background font-sans text-foreground p-8 max-w-7xl mx-auto">
       {/* Main Hero Section */}
@@ -147,9 +200,11 @@ export default function Leads() {
         </div>
 
         <div className="space-y-12">
-          {pendingLead.map((item) => (
-            <LeadDialog lead={item} />
-          ))}
+          {Object.keys(pendingLead).length >= 0
+            ? pendingLead.map((item) => (
+                <LeadDialog lead={item} accept={accept} discard={discard} />
+              ))
+            : null}
         </div>
       </div>
       <Separator />
@@ -157,7 +212,7 @@ export default function Leads() {
       <div className="mb-24 mt-4">
         <div className="flex justify-between items-end mb-8">
           <h2 className="text-[10px] uppercase tracking-[0.2em] font-bold">
-            Leads
+            Accepted Leads
           </h2>
           <div className="flex gap-16 text-[10px] uppercase tracking-[0.2em] font-bold">
             <span className="w-24">Area of Law</span>
@@ -167,9 +222,11 @@ export default function Leads() {
         </div>
 
         <div className="space-y-12">
-          {lead.map((item) => (
-            <LeadDialog lead={item} />
-          ))}
+          {Object.keys(lead).length >= 0
+            ? lead.map((item) => (
+                <LeadDialog lead={item} accept={accept} discard={discard} />
+              ))
+            : null}
         </div>
       </div>
     </div>

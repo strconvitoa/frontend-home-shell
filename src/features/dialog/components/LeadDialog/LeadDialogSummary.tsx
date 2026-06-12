@@ -1,13 +1,18 @@
-import React from 'react';
-import { BrushCleaning, Check, Languages } from 'lucide-react';
-import { Button, Input, Label } from '@/components';
+import React, { useState } from 'react';
+import { BrushCleaning, Check, Languages, ArrowLeft } from 'lucide-react';
+import { Button, Label } from '@/components';
 import { Separator } from '@/components';
-import { Progress } from '@/components/ui/progress';
+
 import type { Lead } from '../..';
 type LeadSummaryProps = {
   lead: Lead;
+  action: (action: number) => void;
 };
-export default function LeadDialogSummary({ lead }: LeadSummaryProps) {
+export default function LeadDialogSummary({
+  lead,
+  action,
+  ...props
+}: LeadSummaryProps) {
   const {
     id,
     issue,
@@ -24,16 +29,21 @@ export default function LeadDialogSummary({ lead }: LeadSummaryProps) {
     email,
     summary,
   } = lead;
+
   return (
-    <div>
-      {/* Top Header Bar */}
+    <div {...props}>
       <div className="flex items-center justify-between px-8 py-4 bg-white border-b">
         <Button
           variant="ghost"
           className="text-[10px] uppercase tracking-widest gap-2 font-normal"
+          onClick={() => {
+            action(0);
+          }}
         >
-          <span className="text-lg">←</span> Back
+          <ArrowLeft />
+          Back
         </Button>
+
         <div className="text-[10px] uppercase tracking-[0.4em] font-medium text-slate-500">
           Review
         </div>
@@ -63,11 +73,19 @@ export default function LeadDialogSummary({ lead }: LeadSummaryProps) {
       {/* Footer Actions */}
       <div className="flex items-center justify-end px-12 py-8 bg-slate-50/50 border-t">
         <div className="flex gap-4">
-          <Button>
+          <Button
+            onClick={() => {
+              action(1);
+            }}
+          >
             <BrushCleaning size={14} strokeWidth={0.5} />
             Discard
           </Button>
-          <Button>
+          <Button
+            onClick={() => {
+              action(2);
+            }}
+          >
             <Check size={14} strokeWidth={0.5} />
             Accept
           </Button>

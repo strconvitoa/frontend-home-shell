@@ -3,7 +3,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-
 import {
   Siren,
   Shredder,
@@ -33,8 +32,10 @@ const LeadDialogTrigger = ({ lead, ...props }: LeadDialogTriggerProps) => {
       {...props}
     >
       <div>
-        <h3 className="text-sm font-medium mb-1">{issue}</h3>
-        <span className="flex gap-1.5 text-[9px] uppercase tracking-widest text-muted-foreground">
+        <span className="flex gap-1">
+          <h3 className="text-lg font-medium mb-1">{issue}</h3>
+        </span>
+        <span className="flex ml-1 gap-2 text-[9px] uppercase tracking-widest text-muted-foreground">
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-widest text-muted-foreground">
